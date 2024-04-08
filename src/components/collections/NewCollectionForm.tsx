@@ -21,7 +21,11 @@ import { toast } from "sonner";
 import axios from "axios";
 import { useState } from "react";
 
-const NewCollectionForm = () => {
+interface CollectionFormProps {
+  initialData?: CollectionType | null;
+}
+
+const NewCollectionForm = ({ initialData }: CollectionFormProps) => {
   const router = useRouter();
   const [isLoaded, setIsLoaded] = useState(false);
 
@@ -33,7 +37,7 @@ const NewCollectionForm = () => {
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
+    defaultValues: initialData || {
       title: "",
       description: "",
       image: "",
@@ -43,13 +47,19 @@ const NewCollectionForm = () => {
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     setIsLoaded(true);
     // console.log(values);
+
+    const url = initialData
+      ? `/api/collections/${initialData._id}`
+      : "/api/collections";
     try {
-      const response = await axios.post("/api/collections", {
-        ...values
-      });
+      const response = initialData
+        ? await axios.put(url, { ...values })
+        : await axios.post(url, {
+            ...values,
+          });
 
       if (response.data.success) {
-        toast("Collection created successfully");
+        initialData ? toast("Collection updated successfully") : toast("Collection created successfully");
         router.push("/collections");
       }
 
@@ -60,9 +70,15 @@ const NewCollectionForm = () => {
     }
   };
 
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement> | React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+    }
+  }
+
   return (
     <div className="px-10 py-6">
-      <p className="font-bold text-3xl">Create Collection</p>
+      <p className="font-bold text-3xl">{ initialData ? "Edit Collection" : "Create Product"}</p>
       <Separator className="bg-gray-700 mt-4 mb-7" />
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
@@ -76,7 +92,7 @@ const NewCollectionForm = () => {
                   <Input
                     placeholder="Title"
                     {...field}
-                    // onKeyDown={handleKeyPress}
+                    onKeyDown={handleKeyPress}
                   />
                 </FormControl>
                 <FormMessage />
@@ -95,7 +111,7 @@ const NewCollectionForm = () => {
                     placeholder="Description"
                     {...field}
                     rows={5}
-                    // onKeyDown={handleKeyPress}
+                    onKeyDown={handleKeyPress}
                   />
                 </FormControl>
                 <FormMessage />
@@ -105,7 +121,7 @@ const NewCollectionForm = () => {
           <FormField
             control={form.control}
             name="image"
-            render={({ field } : any) => (
+            render={({ field }: any) => (
               <FormItem>
                 <FormLabel>Image</FormLabel>
                 <FormControl>
@@ -120,8 +136,12 @@ const NewCollectionForm = () => {
             )}
           />
           <div className="flex gap-4">
-            <Button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white" disabled={isLoaded}>
-              { isLoaded ? "Loading..." : "Submit"}
+            <Button
+              type="submit"
+              className="bg-blue-500 hover:bg-blue-700 text-white"
+              disabled={isLoaded}
+            >
+              {isLoaded ? "Loading..." : "Submit"}
             </Button>
             <Button
               type="button"
