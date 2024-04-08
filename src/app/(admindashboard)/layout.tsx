@@ -19,7 +19,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <div className="flex max-lg:flex-col w-screen h-screen bg-gradient-to-br from-white to-blue-100">
+        <div className="flex max-lg:flex-col min-w-screen min-h-screen bg-gradient-to-br from-white to-blue-100">
           <Leftbar />
           <TopBar />
           <div className="flex-1">{children}</div>

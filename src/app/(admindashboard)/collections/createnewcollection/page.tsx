@@ -6,7 +6,7 @@ export default function NewCollection() {
 
   return (
     <>
-      <NewCollectionForm />
+      <NewCollectionForm initialData={null} />
     </>
   );
 }
