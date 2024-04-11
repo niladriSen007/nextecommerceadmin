@@ -2,10 +2,14 @@ import { connection } from "@/database/connection";
 import { Collection } from "@/models/Collection";
 import { NextRequest, NextResponse } from "next/server";
 
-connection();
+
 
 
 export const GET = async (req: NextRequest,{params} : {params : {collectionId : string}} ) => {
+
+  await connection();
+
+
     const userToken = req.cookies.get("token")?.value;
   
     if (!userToken) {
@@ -25,7 +29,7 @@ export const GET = async (req: NextRequest,{params} : {params : {collectionId : 
         });
       }
   
-      const collection = await Collection.findById(collectionId);
+      const collection = await Collection?.findById(collectionId);
   
       if (!collection) {
         return NextResponse.json({
@@ -50,6 +54,10 @@ export const GET = async (req: NextRequest,{params} : {params : {collectionId : 
 
 
 export const PUT = async (req: NextRequest,{params} : {params : {collectionId : string }}) => {
+
+  await connection();
+
+
     const userToken = req.cookies.get("token")?.value;
   
     if (!userToken) {
@@ -99,6 +107,10 @@ export const PUT = async (req: NextRequest,{params} : {params : {collectionId : 
     }
   }
 export const DELETE = async (req: NextRequest,{params} : {params : {collectionId : string}} ) => {
+
+
+  await connection();
+  
     const userToken = req.cookies.get("token")?.value;
   
     if (!userToken) {
@@ -136,11 +148,10 @@ export const DELETE = async (req: NextRequest,{params} : {params : {collectionId
         status: 200,
         success: true,
       });
+
+      
     } catch (error) {
-      console.log("Error deleting collection", error);
-      return NextResponse.json({
-        error: "Error deleting collection",
-        status: 500,
-      });
+      console.log("[collectionId_DELETE]", error);
+      return new NextResponse("Internal error", { status: 500 });
     }
   }

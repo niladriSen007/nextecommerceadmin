@@ -18,8 +18,6 @@ interface DeleteProps {
   item: string;
 }
 
-
-
 const Delete = ({ id, item = "collections" }: DeleteProps) => {
   // console.log(id)
   const deleteCollection = async () => {
@@ -39,33 +37,35 @@ const Delete = ({ id, item = "collections" }: DeleteProps) => {
   };
 
   return (
-    <AlertDialog>
-      <AlertDialogTrigger>
-        <Button className="bg-red-600 hover:bg-red-700 text-white">
-          <Trash className="h-4 w-4" />
-        </Button>
-      </AlertDialogTrigger>
-      <AlertDialogContent>
-        <AlertDialogHeader>
-          <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-          <AlertDialogDescription>
-            This action cannot be undone. This will permanently delete your
-            account and remove your data from our servers.
-          </AlertDialogDescription>
-        </AlertDialogHeader>
-        <AlertDialogFooter>
-          <AlertDialogCancel className="border-slate-950 hover:bg-slate-950 hover:text-white border">
-            Cancel
-          </AlertDialogCancel>
-          <AlertDialogAction
-            className="bg-red-600 text-white hover:bg-red-700 shadow-lg"
-            onClick={deleteCollection}
-          >
-            Continue
-          </AlertDialogAction>
-        </AlertDialogFooter>
-      </AlertDialogContent>
-    </AlertDialog>
+    <>
+      <AlertDialog>
+        <AlertDialogTrigger>
+          <Button className="bg-red-600 hover:bg-red-700 text-white">
+            <Trash className="h-4 w-4" />
+          </Button>
+        </AlertDialogTrigger>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This action cannot be undone. This will permanently delete your
+              account and remove your data from our servers.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel className="border-slate-950 hover:bg-slate-950 hover:text-white border">
+              Cancel
+            </AlertDialogCancel>
+            <AlertDialogAction
+              className="bg-red-600 text-white hover:bg-red-700 shadow-lg"
+              onClick={deleteCollection}
+            >
+              Continue
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+    </>
   );
 };
 export default Delete;

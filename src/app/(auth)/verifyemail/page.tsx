@@ -8,6 +8,7 @@ import {
   InputOTPSeparator,
   InputOTPSlot,
 } from "@/components/ui/input-otp";
+import { Suspense } from "react";
 
 const VerifyEmail = () => {
   const pathName = useSearchParams();
@@ -28,7 +29,7 @@ const VerifyEmail = () => {
   };
 
   return (
-    <>
+    <Suspense fallback={<>Loading.....</>}>
       <div className="flex w-screen h-screen  items-center justify-center">
         <InputOTP maxLength={6}>
           <InputOTPGroup>
@@ -51,7 +52,7 @@ const VerifyEmail = () => {
           Verify Email
         </Button>
       </div>
-    </>
+    </Suspense>
   );
 };
 export default VerifyEmail;
