@@ -1,4 +1,5 @@
 import { connection } from "@/database/connection";
+import { Collection } from "@/models/Collection";
 import { Product } from "@/models/Product";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -6,6 +7,10 @@ import { NextRequest, NextResponse } from "next/server";
 connection();
 
 export const POST = async (req: NextRequest) => {
+
+  await connection();
+
+
   try {
     const userToken = req.cookies.get("token")?.value;
 
@@ -73,3 +78,36 @@ export const POST = async (req: NextRequest) => {
     });
   }
 };
+
+export const GET = async (req: NextRequest) => {
+
+  await connection();
+
+  let userToken = req.cookies.get("token")?.value;
+
+  if (!userToken) {
+    return NextResponse.json({
+      error: "Unauthorized",
+      status: 401,
+    });
+  }
+
+  try {
+    const products = await Product.find().sort({ createdAt: -1 }).populate({ path: "collections", model: Collection });
+
+    return NextResponse.json({
+      products,
+      status: 200,
+      success: true,
+    });
+  } catch (error) {
+    return NextResponse.json({
+      success: false,
+      message: "Failed to fetch products",
+      status: 500,
+    });
+  }
+}
+
+
+

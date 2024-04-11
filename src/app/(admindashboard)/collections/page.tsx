@@ -14,16 +14,23 @@ export default function Collections() {
   const [collections, setCollections] = useState([]);
   const router = useRouter();
 
-   const getCollections = async () => {
-    setIsLoaded(true);
+  const getCollections = async () => {
+    /* setIsLoaded(true); */
     try {
-      const response = await axios.get("/api/collections");
+      const response = await fetch("/api/collections",{
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },   
+      });
 
-      if (response.data.success) {
-        const data = response.data.collections;
-        setCollections(data);
+      const data = await response.json();
+
+      if (data?.success) {
+        const dataNew : any = data?.collections;
+        setCollections(dataNew);
         // console.log(response.data);
-        setIsLoaded(false);
+        /* setIsLoaded(false); */
       } else {
         console.log("Error fetching collections");
       }
@@ -37,18 +44,20 @@ export default function Collections() {
   }, []);
 
   return (
-    <div className="py-6 px-10">
-      <div className="flex max-md:flex-col md:items-center md:justify-between">
-        <p className="font-bold text-3xl">Collections</p>
-        <Button
-          className="bg-blue-600 text-white hover:bg-blue-700 transition-all duration-300 max-md:mt-4"
-          onClick={() => router.push(`/collections/createnewcollection`)}
-        >
-          Create new collection <Plus className="ml-1" size={20} />
-        </Button>
+    <>
+      <div className="py-6 px-10">
+        <div className="flex max-md:flex-col md:items-center md:justify-between">
+          <p className="font-bold text-3xl">Collections</p>
+          <Button
+            className="bg-blue-600 text-white hover:bg-blue-700 transition-all duration-300 max-md:mt-4"
+            onClick={() => router.push(`/collections/createnewcollection`)}
+          >
+            Create new collection <Plus className="ml-1" size={20} />
+          </Button>
+        </div>
+        <Separator className="bg-gray-700 mt-4 mb-7" />
+       { collections && <DataTable columns={columns} data={collections} searchKey="title" />}
       </div>
-      <Separator className="bg-gray-700 mt-4 mb-7" />
-      <DataTable columns={columns} data={collections} searchKey="title" />
-    </div>
+    </>
   );
 }

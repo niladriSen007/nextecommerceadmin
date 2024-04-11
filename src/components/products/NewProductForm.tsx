@@ -24,7 +24,7 @@ import MultiText from "../shared/MultiText";
 import MultiSelect from "../shared/MultiSelect";
 
 interface ProductFormProps {
-  initialData?: ProductType | null;
+  initialData: ProductType | null;
 }
 
 const formSchema = z.object({
@@ -44,9 +44,17 @@ const NewProductForm = ({ initialData }: ProductFormProps) => {
   const router = useRouter();
   const [isLoaded, setIsLoaded] = useState(false);
 
+
+  console.log(initialData)
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
+    defaultValues: initialData ?  {
+      ...initialData,
+      collections: initialData.collections.map(
+        (collection) => collection._id
+      ),
+    } : {
       title: "",
       description: "",
       media: [],
@@ -64,11 +72,11 @@ const NewProductForm = ({ initialData }: ProductFormProps) => {
     setIsLoaded(true);
     // console.log(values);
 
-    const url = initialData
-      ? `/api/products/${initialData._id}`
+    const url = initialData != null
+      ? `/api/products/${initialData?._id}`
       : "/api/products";
     try {
-      const response = initialData
+      const response = initialData != null
         ? await axios.put(url, { ...values })
         : await axios.post(url, {
             ...values,
@@ -102,15 +110,15 @@ const NewProductForm = ({ initialData }: ProductFormProps) => {
 
 
   const getCollections = async () => {
-    setIsLoaded(true);
+    /* setIsLoaded(true); */
     try {
       const response = await axios.get("/api/collections");
 
       if (response.data.success) {
         const data = response.data.collections;
         setCollections(data);
-        // console.log(response.data);
-        setIsLoaded(false);
+        console.log(response.data.collections);
+       /*  setIsLoaded(false); */
       } else {
         console.log("Error fetching collections");
       }
@@ -126,6 +134,7 @@ const NewProductForm = ({ initialData }: ProductFormProps) => {
 
 
   return (
+    <>
     <div className="px-10 py-6">
       <p className="font-bold text-3xl">
         {initialData ? "Edit Product" : "Create Product"}
@@ -199,7 +208,7 @@ const NewProductForm = ({ initialData }: ProductFormProps) => {
               name="price"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Price ($)</FormLabel>
+                  <FormLabel>Price (₹)</FormLabel>
                   <FormControl>
                     <Input
                       type="number"
@@ -217,7 +226,7 @@ const NewProductForm = ({ initialData }: ProductFormProps) => {
               name="expense"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Expense ($)</FormLabel>
+                  <FormLabel>Expense (₹)</FormLabel>
                   <FormControl>
                     <Input
                       type="number"
@@ -280,7 +289,7 @@ const NewProductForm = ({ initialData }: ProductFormProps) => {
                       <MultiSelect
                         placeholder="Collections"
                         collections={collections}
-                        value={field.value}
+                        value={field?.value}
                         onChange={(_id) =>
                           field.onChange([...field.value, _id])
                         }
@@ -371,6 +380,7 @@ const NewProductForm = ({ initialData }: ProductFormProps) => {
         </form>
       </Form>
     </div>
+    </>
   );
 };
 export default NewProductForm;

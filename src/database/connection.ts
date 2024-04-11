@@ -26,7 +26,7 @@ export const connection = async () => {
     });
 
     connection.on("disconnected", () => {
-      console.log("MongoDB disconnected");
+      console.log("MongoDB disconnected now");
     });
   } catch (error) {
     console.log("Error connecting to MongoDB", error);

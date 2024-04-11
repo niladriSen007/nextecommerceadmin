@@ -3,9 +3,13 @@ import { Collection } from "@/models/Collection";
 
 import { NextRequest, NextResponse } from "next/server";
 
-connection();
+
 
 export const POST = async (req: NextRequest) => {
+
+  await connection();
+
+  
   const userToken = req.cookies.get("token")?.value;
 
   if (!userToken) {
@@ -59,17 +63,28 @@ export const POST = async (req: NextRequest) => {
 };
 
 export const GET = async (req: NextRequest) => {
-  const userToken = req.cookies.get("token")?.value;
+
+   await connection();
+
+
+  /* const userToken = req.cookies.get("token")?.value;
 
   if (!userToken) {
     return NextResponse.json({
       error: "Unauthorized",
       status: 401,
     });
-  }
+  } */
 
   try {
-    const collections = await Collection.find().sort({ createdAt: -1 });
+    const collections = await Collection.find({}).sort({ createdAt: -1 });
+
+    if(!collections){
+      return NextResponse.json({
+        error: "No collections found",
+        status: 404,
+      });
+    }
 
     return NextResponse.json({
       collections,

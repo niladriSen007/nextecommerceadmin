@@ -2,13 +2,16 @@ import { connection } from "@/database/connection";
 import { Admin } from "@/models/Admin";
 import { NextRequest, NextResponse } from "next/server";
 
-connection();
+
 
 export const POST = async (req: NextRequest) => {
+
+  await connection();
+
   const data = await req.json();
   const { token } = data;
 
-  console.log(token);
+  /* console.log(token); */
 
   if (!token) {
     return NextResponse.json({

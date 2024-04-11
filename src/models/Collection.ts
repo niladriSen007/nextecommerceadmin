@@ -31,4 +31,5 @@ const CollectionSchema = new mongoose.Schema({
 });
 
 export const Collection =
-  mongoose.models.Collection || mongoose.model("Collection", CollectionSchema);
+ mongoose.models.Collection
+    || mongoose.model("Collection", CollectionSchema);

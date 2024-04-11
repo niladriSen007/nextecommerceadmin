@@ -15,7 +15,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Separator } from "../ui/separator";
 import { Textarea } from "../ui/textarea";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/router";
 import ImageUpload from "../upload/ImageUpload";
 import { toast } from "sonner";
 import axios from "axios";
@@ -59,7 +59,9 @@ const NewCollectionForm = ({ initialData }: CollectionFormProps) => {
           });
 
       if (response.data.success) {
-        initialData ? toast("Collection updated successfully") : toast("Collection created successfully");
+        initialData
+          ? toast("Collection updated successfully")
+          : toast("Collection created successfully");
         router.push("/collections");
       }
 
@@ -70,90 +72,98 @@ const NewCollectionForm = ({ initialData }: CollectionFormProps) => {
     }
   };
 
-  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement> | React.KeyboardEvent<HTMLTextAreaElement>) => {
+  const handleKeyPress = (
+    e:
+      | React.KeyboardEvent<HTMLInputElement>
+      | React.KeyboardEvent<HTMLTextAreaElement>
+  ) => {
     if (e.key === "Enter") {
       e.preventDefault();
     }
-  }
+  };
 
   return (
-    <div className="px-10 py-6">
-      <p className="font-bold text-3xl">{ initialData ? "Edit Collection" : "Create Product"}</p>
-      <Separator className="bg-gray-700 mt-4 mb-7" />
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-          <FormField
-            control={form.control}
-            name="title"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Title</FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder="Title"
-                    {...field}
-                    onKeyDown={handleKeyPress}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="description"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Description</FormLabel>
-                <FormControl>
-                  <Textarea
-                    className=""
-                    placeholder="Description"
-                    {...field}
-                    rows={5}
-                    onKeyDown={handleKeyPress}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="image"
-            render={({ field }: any) => (
-              <FormItem>
-                <FormLabel>Image</FormLabel>
-                <FormControl>
-                  <ImageUpload
-                    value={field.value ? [field.value] : []}
-                    onChange={(url) => field.onChange(url)}
-                    onRemove={() => field.onChange("")}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <div className="flex gap-4">
-            <Button
-              type="submit"
-              className="bg-blue-500 hover:bg-blue-700 text-white"
-              disabled={isLoaded}
-            >
-              {isLoaded ? "Loading..." : "Submit"}
-            </Button>
-            <Button
-              type="button"
-              onClick={() => router.push("/collections")}
-              className="bg-red-500 hover:bg-red-700 text-white"
-            >
-              Discard
-            </Button>
-          </div>
-        </form>
-      </Form>
-    </div>
+    <>
+      <div className="px-10 py-6">
+        <p className="font-bold text-3xl">
+          {initialData ? "Edit Collection" : "Create Product"}
+        </p>
+        <Separator className="bg-gray-700 mt-4 mb-7" />
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+            <FormField
+              control={form.control}
+              name="title"
+              render={({ field }: any) => (
+                <FormItem>
+                  <FormLabel>Title</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="Title"
+                      {...field}
+                      onKeyDown={handleKeyPress}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="description"
+              render={({ field }: any) => (
+                <FormItem>
+                  <FormLabel>Description</FormLabel>
+                  <FormControl>
+                    <Textarea
+                      className=""
+                      placeholder="Description"
+                      {...field}
+                      rows={5}
+                      onKeyDown={handleKeyPress}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="image"
+              render={({ field }: any) => (
+                <FormItem>
+                  <FormLabel>Image</FormLabel>
+                  <FormControl>
+                    <ImageUpload
+                      value={field.value ? [field.value] : []}
+                      onChange={(url) => field.onChange(url)}
+                      onRemove={() => field.onChange("")}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <div className="flex gap-4">
+              <Button
+                type="submit"
+                className="bg-blue-500 hover:bg-blue-700 text-white"
+                disabled={isLoaded}
+              >
+                {isLoaded ? "Loading..." : "Submit"}
+              </Button>
+              <Button
+                type="button"
+                onClick={() => router.push("/collections")}
+                className="bg-red-500 hover:bg-red-700 text-white"
+              >
+                Discard
+              </Button>
+            </div>
+          </form>
+        </Form>
+      </div>
+    </>
   );
 };
 export default NewCollectionForm;
