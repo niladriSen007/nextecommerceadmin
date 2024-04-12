@@ -8,6 +8,7 @@ import { Plus } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import Loading from "./loading";
 
 export default function Collections() {
   const [isLoaded, setIsLoaded] = useState(false);
@@ -15,7 +16,7 @@ export default function Collections() {
   const router = useRouter();
 
   const getCollections = async () => {
-    /* setIsLoaded(true); */
+    setIsLoaded(true);
     try {
       const response = await fetch("/api/collections",{
         method: "GET",
@@ -30,7 +31,7 @@ export default function Collections() {
         const dataNew : any = data?.collections;
         setCollections(dataNew);
         // console.log(response.data);
-        /* setIsLoaded(false); */
+        setIsLoaded(false);
       } else {
         console.log("Error fetching collections");
       }
@@ -56,7 +57,7 @@ export default function Collections() {
           </Button>
         </div>
         <Separator className="bg-gray-700 mt-4 mb-7" />
-       { collections && <DataTable columns={columns} data={collections} searchKey="title" />}
+       { isLoaded ? <Loading /> : <DataTable columns={columns} data={collections} searchKey="title" />}
       </div>
     </>
   );

@@ -30,23 +30,26 @@ const VerifyEmail = () => {
 
   return (
     <Suspense fallback={<>Loading.....</>}>
-      <div className="flex w-screen h-screen  items-center justify-center">
-        <InputOTP maxLength={6}>
-          <InputOTPGroup>
-            <InputOTPSlot index={0} />
-            <InputOTPSlot index={1} />
-            <InputOTPSlot index={2} />
+      <div className="flex flex-col w-screen h-screen  items-center justify-center">
+        <div className=" bg-zinc-100 p-2">
+
+        <InputOTP maxLength={6} >
+          <InputOTPGroup >
+            <InputOTPSlot index={0} className="border bg-zinc-300 p-2 " />
+            <InputOTPSlot index={1} className="border bg-zinc-300 p-2 " />
+            <InputOTPSlot index={2} className="border bg-zinc-300 p-2 " />
           </InputOTPGroup>
           <InputOTPSeparator />
           <InputOTPGroup>
-            <InputOTPSlot index={3} />
-            <InputOTPSlot index={4} />
-            <InputOTPSlot index={5} />
+            <InputOTPSlot index={3} className="border bg-zinc-300 p-2 " />
+            <InputOTPSlot index={4} className="border bg-zinc-300 p-2 " />
+            <InputOTPSlot index={5} className="border bg-zinc-300 p-2 " />
           </InputOTPGroup>
         </InputOTP>
+        </div>
 
         <Button
-          className="bg-green-500 text-white p-2"
+          className="bg-green-500 mt-4 text-white p-2"
           onClick={verifyEmailFunc}
         >
           Verify Email

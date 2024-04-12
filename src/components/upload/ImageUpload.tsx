@@ -24,7 +24,7 @@ const ImageUpload = ({ value, onChange, onRemove }: ImageUploadProps) => {
               <Button
                 type="button"
                 size="sm"
-                className="bg-red-1 text-white"
+                className="bg-red-500 hover:bg-red-600 text-white"
                 >
                 <Trash
                 onClick={() => onRemove(url)}

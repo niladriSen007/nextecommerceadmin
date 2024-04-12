@@ -1,5 +1,6 @@
 import { connection } from "@/database/connection";
 import { Collection } from "@/models/Collection";
+import { Product } from "@/models/Product";
 import { NextRequest, NextResponse } from "next/server";
 
 
@@ -135,13 +136,14 @@ export const DELETE = async (req: NextRequest,{params} : {params : {collectionId
       }
   
       const collection = await Collection.findByIdAndDelete(collectionId);
+
+
   
-      if (!collection) {
-        return NextResponse.json({
-          error: "Collection not found",
-          status: 404,
-        });
-      }
+      await Product.updateMany(
+        { collections: collectionId },
+        { $pull: { collections: collectionId } }
+      );
+
   
       return NextResponse.json({
         message: "Collection deleted successfully",

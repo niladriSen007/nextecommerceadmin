@@ -18,7 +18,7 @@ interface DeleteProps {
   item: string;
 }
 
-const Delete = ({ id, item = "collections" }: DeleteProps) => {
+const Delete = ({ id, item = "collection" }: DeleteProps) => {
   // console.log(id)
   const deleteCollection = async () => {
     try {
@@ -26,7 +26,7 @@ const Delete = ({ id, item = "collections" }: DeleteProps) => {
       const response = await axios.delete(`/api/${itemType}/${id}`);
       if (response.data.success) {
         console.log(response.data.message);
-        window.location.reload();
+        window.location.href = `${itemType}`
       } else {
         console.log("Error deleting collection");
       }
