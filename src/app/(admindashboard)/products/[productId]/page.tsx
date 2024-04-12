@@ -32,5 +32,7 @@ export default function ProductPage() {
   useEffect(() => {
     getProductDetails();
   }, []);
-  return <NewProductForm initialData={productDetails} />;
+  return (
+    <>{productDetails && <NewProductForm initialData={productDetails} />}</>
+  );
 }

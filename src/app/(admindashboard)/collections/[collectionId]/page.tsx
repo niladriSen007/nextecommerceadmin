@@ -32,5 +32,7 @@ export default function CollectionPage() {
   useEffect(() => {
     getCollectionDetails();
   }, []);
-  return <NewCollectionForm initialData={collectionDetails} />;
+  return <>
+    {collectionDetails && <NewCollectionForm initialData={collectionDetails} />}
+  </>;
 }

@@ -24,7 +24,7 @@ import MultiText from "../shared/MultiText";
 import MultiSelect from "../shared/MultiSelect";
 
 interface ProductFormProps {
-  initialData: ProductType | null;
+  initialData?: ProductType | null;
 }
 
 const formSchema = z.object({
@@ -43,9 +43,34 @@ const formSchema = z.object({
 const NewProductForm = ({ initialData }: ProductFormProps) => {
   const router = useRouter();
   const [isLoaded, setIsLoaded] = useState(false);
+  const [collections, setCollections] = useState<CollectionType[]>([]);
 
 
-  console.log(initialData)
+
+  console.log(initialData,"ind")
+
+
+  const getCollections = async () => {
+    /* setIsLoaded(true); */
+    try {
+      const response = await axios.get("/api/collections");
+
+      if (response.data.success) {
+        const data = response.data.collections;
+        setCollections(data);
+        console.log(response.data.collections);
+       /*  setIsLoaded(false); */
+      } else {
+        console.log("Error fetching collections");
+      }
+    } catch (error) {
+      console.log("Error fetching collections", error);
+    }
+  };
+
+  useEffect(() => {
+    getCollections();
+  }, []);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -70,11 +95,13 @@ const NewProductForm = ({ initialData }: ProductFormProps) => {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     setIsLoaded(true);
-    // console.log(values);
+    console.log(values);
 
     const url = initialData != null
       ? `/api/products/${initialData?._id}`
       : "/api/products";
+
+      
     try {
       const response = initialData != null
         ? await axios.put(url, { ...values })
@@ -106,30 +133,10 @@ const NewProductForm = ({ initialData }: ProductFormProps) => {
     }
   };
 
-  const [collections, setCollections] = useState([]);
 
 
-  const getCollections = async () => {
-    /* setIsLoaded(true); */
-    try {
-      const response = await axios.get("/api/collections");
 
-      if (response.data.success) {
-        const data = response.data.collections;
-        setCollections(data);
-        console.log(response.data.collections);
-       /*  setIsLoaded(false); */
-      } else {
-        console.log("Error fetching collections");
-      }
-    } catch (error) {
-      console.log("Error fetching collections", error);
-    }
-  };
 
-  useEffect(() => {
-    getCollections();
-  }, []);
 
 
 
@@ -140,7 +147,7 @@ const NewProductForm = ({ initialData }: ProductFormProps) => {
         {initialData ? "Edit Product" : "Create Product"}
       </p>
       <Separator className="bg-gray-700 mt-4 mb-7" />
-      <Form {...form}>
+      {  <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
           <FormField
             control={form.control}
@@ -289,7 +296,7 @@ const NewProductForm = ({ initialData }: ProductFormProps) => {
                       <MultiSelect
                         placeholder="Collections"
                         collections={collections}
-                        value={field?.value}
+                        value={field.value}
                         onChange={(_id) =>
                           field.onChange([...field.value, _id])
                         }
@@ -378,7 +385,7 @@ const NewProductForm = ({ initialData }: ProductFormProps) => {
             </Button>
           </div>
         </form>
-      </Form>
+      </Form>}
     </div>
     </>
   );

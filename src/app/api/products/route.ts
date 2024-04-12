@@ -3,13 +3,10 @@ import { Collection } from "@/models/Collection";
 import { Product } from "@/models/Product";
 import { NextRequest, NextResponse } from "next/server";
 
-
 connection();
 
 export const POST = async (req: NextRequest) => {
-
   await connection();
-
 
   try {
     const userToken = req.cookies.get("token")?.value;
@@ -36,14 +33,7 @@ export const POST = async (req: NextRequest) => {
       expense,
     } = data;
 
-    if (
-      !title ||
-      !description ||
-      !media ||
-      !category ||
-      !price ||
-      !expense
-    ) {
+    if (!title || !description || !media || !category || !price || !expense) {
       return NextResponse.json({
         error: "Please provide all fields",
         status: 400,
@@ -64,6 +54,16 @@ export const POST = async (req: NextRequest) => {
     });
     await existingProduct.save();
 
+    if (collections) {
+      collections.forEach(async (collection: string) => {
+        const existingCollection = await Collection.findById(collection);
+        if (existingCollection) {
+          existingCollection.products.push(existingProduct?._id);
+          await existingCollection.save();
+        }
+      });
+    }
+
     return NextResponse.json({
       message: "Product created successfully",
       product: existingProduct,
@@ -80,7 +80,6 @@ export const POST = async (req: NextRequest) => {
 };
 
 export const GET = async (req: NextRequest) => {
-
   await connection();
 
   let userToken = req.cookies.get("token")?.value;
@@ -93,7 +92,9 @@ export const GET = async (req: NextRequest) => {
   }
 
   try {
-    const products = await Product.find().sort({ createdAt: -1 }).populate({ path: "collections", model: Collection });
+    const products = await Product.find()
+      .sort({ createdAt: -1 })
+      .populate({ path: "collections", model: Collection });
 
     return NextResponse.json({
       products,
@@ -107,7 +108,4 @@ export const GET = async (req: NextRequest) => {
       status: 500,
     });
   }
-}
-
-
-
+};

@@ -6,9 +6,12 @@ import { Admin } from "@/models/Admin";
 
 import { NextRequest, NextResponse } from "next/server";
 
-connection();
+
 
 export const POST = async (req: NextRequest) => {
+
+  await connection();
+
   try {
     const data = await req.json();
     const { email, password } = data;

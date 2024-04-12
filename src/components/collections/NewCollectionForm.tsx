@@ -15,7 +15,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Separator } from "../ui/separator";
 import { Textarea } from "../ui/textarea";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import ImageUpload from "../upload/ImageUpload";
 import { toast } from "sonner";
 import axios from "axios";
