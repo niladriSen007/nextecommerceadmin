@@ -11,14 +11,14 @@ export const GET = async (req: NextRequest,{params} : {params : {collectionId : 
   await connection();
 
 
-    const userToken = req.cookies.get("token")?.value;
+    /* const userToken = req.cookies.get("token")?.value;
   
     if (!userToken) {
       return NextResponse.json({
         error: "Unauthorized",
         status: 401,
       });
-    }
+    } */
   
     const { collectionId } = params;
   
@@ -30,7 +30,10 @@ export const GET = async (req: NextRequest,{params} : {params : {collectionId : 
         });
       }
   
-      const collection = await Collection?.findById(collectionId);
+      const collection = await Collection?.findById(collectionId).populate({
+        path:"products",
+        model:Product,
+        });
   
       if (!collection) {
         return NextResponse.json({

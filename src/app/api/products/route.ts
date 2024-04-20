@@ -3,7 +3,7 @@ import { Collection } from "@/models/Collection";
 import { Product } from "@/models/Product";
 import { NextRequest, NextResponse } from "next/server";
 
-connection();
+
 
 export const POST = async (req: NextRequest) => {
   await connection();
@@ -82,14 +82,14 @@ export const POST = async (req: NextRequest) => {
 export const GET = async (req: NextRequest) => {
   await connection();
 
-  let userToken = req.cookies.get("token")?.value;
+  /* let userToken = req.cookies.get("token")?.value;
 
   if (!userToken) {
     return NextResponse.json({
       error: "Unauthorized",
       status: 401,
     });
-  }
+  } */
 
   try {
     const products = await Product.find()
