@@ -10,7 +10,6 @@ export default function ProductPage() {
   const productId = pathName.split("/")[2];
 
   const [productDetails, setProductDetails] = useState<ProductType | null>();
-  const [isLoaded, setIsLoaded] = useState(false);
 
   const getProductDetails = async () => {
     /* setIsLoaded(true); */

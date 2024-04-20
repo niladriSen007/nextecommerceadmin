@@ -10,14 +10,14 @@ export const GET = async (
 ) => {
   await connection();
 
-  const userToken = req.cookies.get("token")?.value;
+  /* const userToken = req.cookies.get("token")?.value;
 
   if (!userToken) {
     return NextResponse.json({
       error: "Unauthorized",
       status: 401,
     });
-  }
+  } */
 
   const { productId } = params;
 
