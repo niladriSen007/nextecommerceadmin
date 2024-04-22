@@ -84,3 +84,6 @@ export const POST = async (req: NextRequest) => {
     return new NextResponse("Failed to create the order", { status: 500 })
   }
 }
+
+
+export const dynamic = "force-dynamic";
