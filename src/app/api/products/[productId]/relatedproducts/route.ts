@@ -46,3 +46,6 @@ export const GET = async ( req:NextRequest, { params }: { params: { productId: s
         });
     }
     }
+
+
+export const dynamic = "force-dynamic";

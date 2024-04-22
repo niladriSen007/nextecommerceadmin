@@ -187,3 +187,6 @@ export const PUT = async (
     });
   }
 };
+
+
+export const dynamic = "force-dynamic";

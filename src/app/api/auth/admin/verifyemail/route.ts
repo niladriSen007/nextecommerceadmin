@@ -48,3 +48,6 @@ export const POST = async (req: NextRequest) => {
     success: true,
   });
 };
+
+
+export const dynamic = "force-dynamic";

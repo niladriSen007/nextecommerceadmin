@@ -2,12 +2,10 @@
 
 
 import { columns } from "@/components/orderedItem/OrderItemColumns"
-import { Button } from "@/components/ui/button"
 import { DataTable } from "@/components/ui/data-table"
 import { Separator } from "@/components/ui/separator"
 import axios from "axios"
 import dotenv from "dotenv"
-import { Plus } from "lucide-react"
 
 dotenv.config()
 
@@ -49,3 +47,5 @@ const OrderDetails = async ({ params }: { params: { orderId: string }}) => {
 }
 
 export default OrderDetails
+
+export const dynamic = "force-dynamic";
